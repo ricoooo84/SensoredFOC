@@ -20,7 +20,7 @@
 #define TIM_DTG		100	// 100 MHz needs 100 cycles for 1us
 
 void timer_pwm_init();
-
+void timer_pwm_start_temp();
 
 
 #endif /* INC_TIMER_PWM_H_ */

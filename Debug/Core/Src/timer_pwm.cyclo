@@ -1,2 +1,3 @@
 ../Core/Src/timer_pwm.c:10:13:pwm_gpio_init	1
-../Core/Src/timer_pwm.c:25:6:timer_pwm_init	1
+../Core/Src/timer_pwm.c:31:6:timer_pwm_init	1
+../Core/Src/timer_pwm.c:62:6:timer_pwm_start_temp	1

@@ -88,6 +88,8 @@ int main(void)
 
   timer_pwm_init();
 
+  timer_pwm_start_temp();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

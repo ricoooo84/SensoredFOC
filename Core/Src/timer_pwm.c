@@ -16,10 +16,16 @@ static void pwm_gpio_init() {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
 
 	// PA12-15 have nonzero mode reset values
-	// 10 (0x2) = AFmode
+	// 0b10 = 0x2 = AFmode
 	GPIOA->MODER |= (0x2 << GPIO_MODER_MODE7_Pos) | (0x2 << GPIO_MODER_MODE8_Pos) |
 					(0x2 << GPIO_MODER_MODE9_Pos) | (0x2 << GPIO_MODER_MODE10_Pos);
 	GPIOB->MODER |= (0x2 << GPIO_MODER_MODE0_Pos) | (0x2 << GPIO_MODER_MODE1_Pos);
+
+	// 0b0001 =
+	GPIOA->AFR[0] |= (0x1 << GPIO_AFRL_AFSEL7_Pos);
+	GPIOA->AFR[1] |= (0x1 << GPIO_AFRH_AFSEL8_Pos) | (0x1 << GPIO_AFRH_AFSEL9_Pos) |
+					 (0x1 << GPIO_AFRH_AFSEL10_Pos);
+	GPIOB->AFR[0] |= (0x1 << GPIO_AFRL_AFSEL0_Pos) | (0x1 << GPIO_AFRL_AFSEL1_Pos);
 }
 
 void timer_pwm_init() {
@@ -53,3 +59,9 @@ void timer_pwm_init() {
 }
 
 // USE CCR1/2/3 TO CHANGE DUTY
+void timer_pwm_start_temp() {
+	// 50%
+	TIM_PWM->CCR1 = 1250;
+	TIM_PWM->CCR2 = 1250;
+	TIM_PWM->CCR3 = 1250;
+}
