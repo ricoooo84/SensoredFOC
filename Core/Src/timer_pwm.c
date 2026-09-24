@@ -1,0 +1,55 @@
+/*
+ * timer_pwm.c
+ *
+ *  Created on: Sep 23, 2026
+ *      Author: rcall
+ */
+
+#include "timer_pwm.h"
+
+static void pwm_gpio_init() {
+	// (assuming TIM1)
+	// CH1: PA8		CH1N: PA7
+	// CH2: PA9		CH2N: PB0
+	// CH3: PA10	CH3N: PB1
+
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
+
+	// PA12-15 have nonzero mode reset values
+	// 10 (0x2) = AFmode
+	GPIOA->MODER |= (0x2 << GPIO_MODER_MODE7_Pos) | (0x2 << GPIO_MODER_MODE8_Pos) |
+					(0x2 << GPIO_MODER_MODE9_Pos) | (0x2 << GPIO_MODER_MODE10_Pos);
+	GPIOB->MODER |= (0x2 << GPIO_MODER_MODE0_Pos) | (0x2 << GPIO_MODER_MODE1_Pos);
+}
+
+void timer_pwm_init() {
+	pwm_gpio_init();
+
+	RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+
+	// PWM mode
+	TIM_PWM->CR1 |= (0x01 << TIM_CR1_CMS_Pos); // center aligned PWM mode
+	TIM_PWM->CCMR1 |= (0x6 << TIM_CCMR1_OC1M_Pos);
+	TIM_PWM->CCMR1 |= (0x6 << TIM_CCMR1_OC2M_Pos);
+	TIM_PWM->CCMR2 |= (0x6 << TIM_CCMR2_OC3M_Pos);
+
+	// time base units
+	TIM_PWM->RCR = 1; // UE triggers every other event
+	TIM_PWM->PSC = TIM_PSC;
+	TIM_PWM->ARR = TIM_ARR;
+
+	// preload
+	TIM_PWM->CCMR1 |= TIM_CCMR1_OC1PE | TIM_CCMR1_OC2PE;
+	TIM_PWM->CCMR2 |= TIM_CCMR2_OC3PE;
+
+	// channel enables
+	TIM_PWM->CCER |= TIM_CCER_CC1E | TIM_CCER_CC2E | TIM_CCER_CC3E |
+				     TIM_CCER_CC1NE | TIM_CCER_CC2NE | TIM_CCER_CC3NE;
+	TIM_PWM->BDTR |= TIM_BDTR_MOE | (TIM_DTG << TIM_BDTR_DTG_Pos); // 100 clock cycles = 1us deadtime (CKD = 0)
+
+	// generate update by software before starting counter
+	TIM_PWM->EGR |= TIM_EGR_UG;
+	TIM_PWM->CR1 |= TIM_CR1_CEN;
+}
+
+// USE CCR1/2/3 TO CHANGE DUTY
