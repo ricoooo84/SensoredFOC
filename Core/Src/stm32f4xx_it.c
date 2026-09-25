@@ -52,9 +52,7 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void TIM1_CC_IRQHandler(void) {
 
-}
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -202,5 +200,7 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-
+void TIM1_UP_TIM10_IRQHandler(void) {
+	timer_pwm_irq();
+}
 /* USER CODE END 1 */

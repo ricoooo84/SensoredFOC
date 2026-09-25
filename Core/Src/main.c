@@ -86,7 +86,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-
+  timer_pwm_init();
   debug_gpio_init();
 
   /* USER CODE END 2 */
@@ -96,8 +96,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_Delay(1000);
-	  debug_gpio_toggle();
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

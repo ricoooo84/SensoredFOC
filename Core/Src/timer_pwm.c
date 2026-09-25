@@ -6,8 +6,10 @@
  */
 
 #include "timer_pwm.h"
+#include "debug.h"
 
-static void pwm_gpio_init() {
+
+static void cfg_gpio_regs() {
 	// (assuming TIM1)
 	// CH1: PA8		CH1N: PA7
 	// CH2: PA9		CH2N: PB0
@@ -28,9 +30,12 @@ static void pwm_gpio_init() {
 	GPIOB->AFR[0] |= (0x1 << GPIO_AFRL_AFSEL0_Pos) | (0x1 << GPIO_AFRL_AFSEL1_Pos);
 }
 
-void timer_pwm_init() {
-	pwm_gpio_init();
+static void cfg_tim_interrupts() {
+	TIM_PWM->DIER |= TIM_DIER_UIE;
+	NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+}
 
+static void cfg_tim_pwm() {
 	RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
 
 	// PWM mode
@@ -53,15 +58,23 @@ void timer_pwm_init() {
 				     TIM_CCER_CC1NE | TIM_CCER_CC2NE | TIM_CCER_CC3NE;
 	TIM_PWM->BDTR |= TIM_BDTR_MOE | (TIM_DTG << TIM_BDTR_DTG_Pos); // 100 clock cycles = 1us deadtime (CKD = 0)
 
+	cfg_tim_interrupts();
+
 	// generate update by software before starting counter
 	TIM_PWM->EGR |= TIM_EGR_UG;
 	TIM_PWM->CR1 |= TIM_CR1_CEN;
 }
 
+void timer_pwm_init() {
+	cfg_gpio_regs();
+	cfg_tim_pwm();
+}
+
 // USE CCR1/2/3 TO CHANGE DUTY
-void timer_pwm_start_temp() {
-	// 50%
-	TIM_PWM->CCR1 = 1250;
-	TIM_PWM->CCR2 = 1250;
-	TIM_PWM->CCR3 = 1250;
+
+
+void timer_pwm_irq() {
+	debug_gpio_toggle();
+
+	TIM_PWM->SR &= ~(TIM_SR_UIF);
 }
