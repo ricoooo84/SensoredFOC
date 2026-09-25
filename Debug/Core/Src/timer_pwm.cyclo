@@ -1,6 +1,7 @@
 ../Drivers/CMSIS/Include/core_cm4.h:1684:22:__NVIC_EnableIRQ	2
-../Core/Src/timer_pwm.c:12:13:cfg_gpio_regs	1
-../Core/Src/timer_pwm.c:33:13:cfg_tim_interrupts	1
-../Core/Src/timer_pwm.c:38:13:cfg_tim_pwm	1
-../Core/Src/timer_pwm.c:68:6:timer_pwm_init	1
-../Core/Src/timer_pwm.c:76:6:timer_pwm_irq	1
+../Core/Src/timer_pwm.c:16:13:cfg_gpio_regs	1
+../Core/Src/timer_pwm.c:37:13:cfg_tim_interrupts	1
+../Core/Src/timer_pwm.c:42:13:cfg_tim_pwm	1
+../Core/Src/timer_pwm.c:75:6:timer_pwm_init	1
+../Core/Src/timer_pwm.c:80:6:timer_pwm_sin	2
+../Core/Src/timer_pwm.c:97:6:timer_pwm_irq	1

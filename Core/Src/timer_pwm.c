@@ -6,8 +6,12 @@
  */
 
 #include "timer_pwm.h"
+#include "math.h"
 #include "debug.h"
 
+static float theta = 0.0f;
+static float omega = 0.2f;
+static float _120deg = 2.0944f;
 
 static void cfg_gpio_regs() {
 	// (assuming TIM1)
@@ -65,16 +69,33 @@ static void cfg_tim_pwm() {
 	TIM_PWM->CR1 |= TIM_CR1_CEN;
 }
 
+
+
+
 void timer_pwm_init() {
 	cfg_gpio_regs();
 	cfg_tim_pwm();
 }
 
+void timer_pwm_sin() {
+	float duty_a = 0.5f + 0.5*sinf(theta);
+	float duty_b = 0.5f + 0.5*sinf(theta - _120deg);
+	float duty_c = 0.5f + 0.5*sinf(theta - 2*_120deg);
+
+	TIM1->CCR1 = (uint16_t)(duty_a * TIM1->ARR);
+	TIM1->CCR2 = (uint16_t)(duty_b * TIM1->ARR);
+	TIM1->CCR3 = (uint16_t)(duty_c * TIM1->ARR);
+
+	theta += omega;
+	if (theta > 6.2831853f) {
+		theta -= 6.2831853f;
+	}
+}
+
 // USE CCR1/2/3 TO CHANGE DUTY
 
-
 void timer_pwm_irq() {
-	debug_gpio_toggle();
+	timer_pwm_sin();
 
 	TIM_PWM->SR &= ~(TIM_SR_UIF);
 }

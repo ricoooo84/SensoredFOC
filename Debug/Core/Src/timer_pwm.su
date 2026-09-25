@@ -1,6 +1,7 @@
 ../Drivers/CMSIS/Include/core_cm4.h:1684:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
-../Core/Src/timer_pwm.c:12:13:cfg_gpio_regs	4	static
-../Core/Src/timer_pwm.c:33:13:cfg_tim_interrupts	8	static
-../Core/Src/timer_pwm.c:38:13:cfg_tim_pwm	8	static
-../Core/Src/timer_pwm.c:68:6:timer_pwm_init	8	static
-../Core/Src/timer_pwm.c:76:6:timer_pwm_irq	8	static
+../Core/Src/timer_pwm.c:16:13:cfg_gpio_regs	4	static
+../Core/Src/timer_pwm.c:37:13:cfg_tim_interrupts	8	static
+../Core/Src/timer_pwm.c:42:13:cfg_tim_pwm	8	static
+../Core/Src/timer_pwm.c:75:6:timer_pwm_init	8	static
+../Core/Src/timer_pwm.c:80:6:timer_pwm_sin	24	static
+../Core/Src/timer_pwm.c:97:6:timer_pwm_irq	8	static
